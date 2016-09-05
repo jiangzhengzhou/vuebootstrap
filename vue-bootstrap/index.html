@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vue Bootstrap</title>
+  <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
+<body>
+  <!-- 导航栏 -->
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <a href="/" class="navbar-brand">
+        <i class="glyphicon glyphicon-bullhorn">
+          Vue备忘录
+        </i>
+      </a>
+    </div>
+  </nav>
+  <!-- 应用的主要布部分 -->
+  <div class="container" id="events">
+    <div class="col-sm-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3>添加一个事物</h3>
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="事件名称" v-model="event.name">
+          </div>
+          <div class="form-group">
+            <textarea class="form-control" placeholder="事件描述" v-model="event.description">
+            </textarea>
+          </div>
+          <div class="form-group">
+            <input type="date" placeholder="Date" class="form-control" v-model="event.date">
+          </div>
+          <button class="btn btn-primary" @click="addEvent">提交</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6">
+      <div class="list-group">
+        <a href="#" class="list-group-item" v-for="event in events">
+          <h4 class="list-group-item-heading">
+            <i class="glyphicon glyphicon-bullhorn"></i>
+            {{event.name}}
+          </h4>
+          <h5>
+            <i class="glyphicon glyphicon-calendar" v-if="event.date"></i>
+            {{event.date}}
+          </h5>
+          <p class="list-group-item-text" v-if="event.description">{{event.description}}</p>
+          <button class="btn btn-xs btn-danger" @click="deleteEvent($index)">删除</button>
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="http://cdn.bootcss.com/vue/1.0.26/vue.min.js"></script>
+<script>
+  var vm = new Vue({
+    el:'#events',
+    //数据
+    data:{
+      event:{
+        name:'',
+        description:'',
+        date:'',
+      },
+      events:[]
+    },
+      // 生命周期函数，初始化后立即调用
+    ready:function(){
+      this.fetchEvents();
+    },
+    //应用中使用到的方法都在次定义
+    methods:{
+      addEvent (){
+        this.events.push(this.event);
+        this.event = '';
+      },
+      deleteEvent(index){
+        this.events.splice(index,1);
+      },
+      fetchEvents() {
+        var events = [
+          {
+            id:1,
+            name:'开会',
+            description:'上午9点在21层大会议室',
+            date:'2015-09-10'
+          },
+          {
+            id:2,
+            name:'购物',
+            description:'买个充电宝',
+            date:'2015-10-02'
+          },
+          {
+            id:3,
+            name:'学习',
+            description:'学习Vue官网上的教程',
+            date:'2016-03-11'
+          }
+        ];
+        //  $set是vue 设置属性的方法
+        this.$set('events',events);
+      }
+    }
+  })
+</script>
+</html>
